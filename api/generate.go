@@ -1,0 +1,6 @@
+package api
+
+//go:generate go run github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen -config config.yaml ./api.yaml
+//go:generate go run github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen --include-tags users -config ./user/config-user.yaml ./api.yaml
+//go:generate go run github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen --include-tags auth -config ./auth/config-auth.yaml ./api.yaml
+//go:generate go run github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen --include-tags auth-private -config ./authPrivate/config-auth-private.yaml ./api.yaml
