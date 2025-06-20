@@ -3,6 +3,7 @@ package types
 type RegisterUserInput struct {
 	Username string
 	Password string
+	FullName string
 }
 
 type RegisterUserOutput struct {

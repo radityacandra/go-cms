@@ -81,6 +81,134 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DefaultErrorResponse'
+  /api/v1/articles:
+    get:
+      tags:
+        - article-public
+      summary: Get article list
+      description: |
+        Returns list of published articles for authenticated / non authenticated user.
+        for non authenticated user, by default only returns published article
+      operationId: ArticleListGet
+      parameters:
+        - $ref: '#/components/parameters/OptionalPageParams'
+        - $ref: '#/components/parameters/OptionalPageSizeParams'
+        - $ref: '#/components/parameters/OptionalStatusParams'
+      responses:
+        '200':
+          description: Success - Returns user profile information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleListGetResponse'
+        '401':
+          description: Unauthorized - Invalid or missing token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultErrorResponse'
+    post:
+      tags:
+        - article-private
+      summary: Create new article
+      description: create new article. can be directly published or waiting for editorial depending the role
+      operationId: ArticleCreatePost
+      security:
+        - BearerAuth: ['create-article', 'create-article-published']
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticleCreatePostRequest'
+      responses:
+        '200':
+          description: Success - Returns created article id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IDOnlyResponseSchema'
+        '400':
+          description: Error - Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultErrorResponse'
+  /api/v1/articles/{article_id}:
+    get:
+      tags:
+        - article-public
+      summary: Get article detail
+      description: Returns the detail of a specific article by its ID
+      operationId: ArticleDetailGet
+      parameters:
+        - $ref: '#/components/parameters/RequiredArticleIdParams'
+      responses:
+        '200':
+          description: Success - Returns article detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleDetailGetResponse'
+        '404':
+          description: Not Found - Article does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultErrorResponse'
+    put:
+      tags:
+        - article-private
+      summary: Update article
+      description: Update the title and content of an article by its ID
+      operationId: ArticleUpdatePut
+      security:
+        - BearerAuth: ['update-article', 'update-article-published']
+      parameters:
+        - $ref: '#/components/parameters/RequiredArticleIdParams'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticleUpdatePutRequest'
+      responses:
+        '200':
+          description: Success - Returns created article revision id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IDOnlyResponseSchema'
+        '404':
+          description: Not Found - Article does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultErrorResponse'
+  /api/v1/articles/{article_id}/revisions/{revision_id}:
+    get:
+      tags:
+        - article-private
+      summary: Get article revision detail
+      description: Returns the detail of a specific article revision by its ID
+      operationId: ArticleRevisionDetailGet
+      security:
+        - BearerAuth: ['get-article-revision']
+      parameters:
+        - $ref: '#/components/parameters/RequiredArticleIdParams'
+        - $ref: '#/components/parameters/RequiredRevisionIdParams'
+      responses:
+        '200':
+          description: Success - Returns article revision detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleRevisionDetailGetResponse'
+        '404':
+          description: Not Found - Article or revision does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultErrorResponse'
 components:
   securitySchemes:
     BearerAuth:
@@ -91,45 +219,46 @@ components:
         See: https://swagger.io/docs/specification/authentication/bearer-authentication/
       bearerFormat: Bearer <token>
   parameters:
-    OptionalDescriptionParam:
-      name: description
-      in: query
-      required: false
-      description: search by job description
-      schema:
-        type: string
-    OptionalLocationParam:
-      name: location
-      in: query
-      required: false
-      description: search by job location
-      schema:
-        type: string
-    OptionalJobTypeParam:
-      name: full_time
-      in: query
-      required: false
-      description: search by job type
-      schema:
-        type: boolean
-    OptionalPageParam:
+    OptionalPageParams:
       name: page
       in: query
       required: false
-      description: paginate result
+      description: active page in pagination. default to 1
+      example: 1
       schema:
         type: integer
-      x-oapi-codegen-extra-tags:
-        validate: omitempty,gt=0
-    JobIdParam:
-      name: job_id
-      in: path
-      required: true
-      description: id of the job
+    OptionalPageSizeParams:
+      name: page-size
+      in: query
+      required: false
+      description: max number of data in the active page. default to 10
+      example: 10
+      schema:
+        type: integer
+    OptionalStatusParams:
+      name: status
+      in: query
+      required: false
+      description: filter by article status. default to published for non authenticated user and all to authenticated one
+      example: published
       schema:
         type: string
-      x-oapi-codegen-extra-tags:
-        validate: required,uuid
+    RequiredArticleIdParams:
+      name: article_id
+      in: path
+      required: true
+      description: ID of the article
+      example: af7960fa-5e86-489a-84df-cca87a5553d0
+      schema:
+        type: string
+    RequiredRevisionIdParams:
+      name: revision_id
+      in: path
+      required: true
+      description: ID of the revision
+      example: 0cc6dbd9-d194-4e9b-bb3c-1df61b8fe409
+      schema:
+        type: string
   schemas:
     DefaultErrorResponse:
       type: object
@@ -145,6 +274,7 @@ components:
       required:
         - username
         - password
+        - fullName
       properties:
         username:
           type: string
@@ -156,6 +286,12 @@ components:
           type: string
           description: user password for authentication purpose
           example: somepassword
+          x-oapi-codegen-extra-tags:
+            validate: required
+        fullName:
+          type: string
+          description: user full name
+          example: John Doe
           x-oapi-codegen-extra-tags:
             validate: required
     UserPostResponse:
@@ -212,3 +348,200 @@ components:
           example:
             - get-profile
             - list-articles
+    ArticleListGetResponse:
+      type: object
+      required:
+        - data
+        - pagination
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArticleListGetResponseItem'
+        pagination:
+          $ref: '#/components/schemas/PaginationSchema'
+    ArticleListGetResponseItem:
+      type: object
+      required:
+        - id
+        - title
+        - content
+        - author
+        - status
+      properties:
+        id: 
+          type: string
+          description: id of the article
+          example: 43558e76-cd03-4496-b5ae-b22b63d2356c
+        title:
+          type: string
+          description: title of the article
+          example: Some Article Title
+        content:
+          type: string
+          description: content of the article. can contains escaped html
+          example: <div id\="content"\>some content</div\>
+        author:
+          $ref: '#/components/schemas/AuthorSchema'
+        status:
+          type: string
+          description: article publishing status
+          example: drafted
+    AuthorSchema:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          description: id of the user
+          example: 9226c192-dba6-4e15-b5b3-0c9a983b5fe1
+        name:
+          type: string
+          description: name of the user
+          example: John Doe
+    PaginationSchema:
+      type: object
+      required:
+        - page
+        - pageSize
+        - totalData
+      properties:
+        page:
+          type: integer
+          format: int64
+          description: current active page number (default to 1)
+          example: 1
+        pageSize:
+          type: integer
+          format: int64
+          description: total data displayed on the page (default to 10)
+          example: 10
+        totalData:
+          type: integer
+          format: int64
+          description: total number of data available. with formula of ceil(totalData / pageSize), can determine total page available
+          example: 156
+    ArticleCreatePostRequest:
+      type: object
+      required:
+        - content
+        - title
+        - status
+      properties:
+        title:
+          type: string
+          description: title of the article
+          example: Some Article Title
+        content:
+          type: string
+          description: content of the article. any contents with html tags are welcomed
+          example: <p>some content</p>
+        status:
+          type: string
+          description: publishing status of the article
+          example: drafted
+    IDOnlyResponseSchema:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: ID of created object
+          example: f51bec61-436f-4bc4-9d21-09b35a36eb95
+    ArticleDetailGetResponse:
+      type: object
+      required:
+        - id
+        - title
+        - content
+        - author
+        - revisionHistories
+      properties:
+        id:
+          type: string
+          description: id of the article
+          example: 9652528b-840b-4d80-9f7d-c70fb0f2f193
+        title:
+          type: string
+          description: title of the article
+          example: Some Article Title
+        content:
+          type: string
+          description: content of the article
+          example: <div id="content">some content</div>
+        author:
+          $ref: '#/components/schemas/AuthorSchema'
+        editor:
+          $ref: '#/components/schemas/AuthorSchema'
+        revisionHistories:
+          type: array
+          description: historical article revision
+          items:
+            $ref: '#/components/schemas/RevisionHistorySchema'
+    ArticleUpdatePutRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: title of the article
+          example: Updated Article Title
+        content:
+          type: string
+          description: content of the article
+          example: <p>updated content</p>
+        status:
+          type: string
+          description: status of the article
+          example: submitted
+    RevisionHistorySchema:
+      type: object
+      required:
+        - id
+        - authorName
+        - authorId
+        - revisionTime
+      properties:
+        id:
+          type: string
+          description: id of the revision
+          example: 0cc6dbd9-d194-4e9b-bb3c-1df61b8fe409
+        authorName:
+          type: string
+          description: full name of the editor
+          example: John Doe
+        authorId:
+          type: string
+          description: user id of the editor
+          example: 0a2ff21a-f27e-4227-860d-212f5faa1c37
+        revisionTime:
+          type: integer
+          format: int64
+          description: time which article is inactive (unix millisecond)
+          example: 1750446402000
+    ArticleRevisionDetailGetResponse:
+      type: object
+      required:
+        - id
+        - title
+        - content
+        - author
+      properties:
+        id:
+          type: string
+          description: id of the article
+          example: 9652528b-840b-4d80-9f7d-c70fb0f2f193
+        title:
+          type: string
+          description: title of the article
+          example: Some Article Title
+        content:
+          type: string
+          description: content of the article
+          example: <div id="content">some content</div>
+        author:
+          $ref: '#/components/schemas/AuthorSchema'
+        editor:
+          $ref: '#/components/schemas/AuthorSchema'

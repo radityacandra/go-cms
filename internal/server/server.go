@@ -6,9 +6,12 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/radityacandra/go-cms/api/article"
+	"github.com/radityacandra/go-cms/api/articlePrivate"
 	"github.com/radityacandra/go-cms/api/auth"
 	"github.com/radityacandra/go-cms/api/authPrivate"
 	"github.com/radityacandra/go-cms/api/user"
+	articleHandler "github.com/radityacandra/go-cms/internal/application/article/handler"
 	authHandler "github.com/radityacandra/go-cms/internal/application/auth/handler"
 	"github.com/radityacandra/go-cms/internal/application/user/handler"
 	"github.com/radityacandra/go-cms/internal/core"
@@ -25,6 +28,7 @@ func InitServer(ctx context.Context, deps *core.Dependency) {
 	e.Validator = validator.NewValidator()
 
 	e.Use(middleware.CORS())
+	e.Use(jwt.OptionalAuthorize())
 
 	deps.Echo = e
 
@@ -33,6 +37,10 @@ func InitServer(ctx context.Context, deps *core.Dependency) {
 
 	userHandler := handler.NewHandler(deps)
 	user.RegisterHandlers(e, userHandler)
+
+	articleHandler := articleHandler.NewHandler(deps)
+	article.RegisterHandlers(e, articleHandler)
+	articlePrivate.RegisterHandlers(ePrivate, articleHandler)
 
 	authHandler := authHandler.NewHandler(deps)
 	auth.RegisterHandlers(e, authHandler)

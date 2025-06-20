@@ -10,8 +10,8 @@ func (r *Repository) InsertUser(ctx context.Context, input model.User) error {
 	db := r.Db.GetTransaction(ctx)
 
 	_, err := db.NamedExecContext(ctx, `
-		INSERT INTO public.users(id, username, password, created_at, created_by) 
-		VALUES (:id, :username, :password, :created_at, :created_by)`,
+		INSERT INTO public.users(id, username, password, full_name, created_at, created_by) 
+		VALUES (:id, :username, :password, :full_name, :created_at, :created_by)`,
 		&input)
 
 	return err

@@ -74,7 +74,10 @@ func ReturnBadRequest(ctx echo.Context, err error, logger *zap.Logger) error {
 }
 
 func GetLoggedUser(ctx echo.Context) string {
-	data := ctx.Get(jwtType.CONTEXT_KEY).(map[string]interface{})
+	data, ok := ctx.Get(jwtType.CONTEXT_KEY).(map[string]interface{})
+	if !ok {
+		return ""
+	}
 
 	if userId, ok := data["sub"].(string); ok {
 		return userId

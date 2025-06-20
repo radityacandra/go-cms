@@ -15,6 +15,9 @@ type DefaultErrorResponse struct {
 
 // UserPostRequest defines model for UserPostRequest.
 type UserPostRequest struct {
+	// FullName user full name
+	FullName string `json:"fullName" validate:"required"`
+
 	// Password user password for authentication purpose
 	Password string `json:"password" validate:"required"`
 

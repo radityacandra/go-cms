@@ -33,7 +33,7 @@ func (s *Service) RegisterUser(ctx context.Context, input types.RegisterUserInpu
 	}
 
 	userId := uuid.NewString()
-	user := model.NewUser(userId, input.Username, password, time.Now().UnixMilli(), userId)
+	user := model.NewUser(userId, input.Username, password, input.FullName, time.Now().UnixMilli(), userId)
 
 	txCtx, err := s.Repository.BeginTransaction(ctx)
 	if err != nil {

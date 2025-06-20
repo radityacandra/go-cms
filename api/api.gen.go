@@ -7,6 +7,86 @@ const (
 	BearerAuthScopes = "BearerAuth.Scopes"
 )
 
+// ArticleCreatePostRequest defines model for ArticleCreatePostRequest.
+type ArticleCreatePostRequest struct {
+	// Content content of the article. any contents with html tags are welcomed
+	Content string `json:"content"`
+
+	// Status publishing status of the article
+	Status string `json:"status"`
+
+	// Title title of the article
+	Title string `json:"title"`
+}
+
+// ArticleDetailGetResponse defines model for ArticleDetailGetResponse.
+type ArticleDetailGetResponse struct {
+	Author AuthorSchema `json:"author"`
+
+	// Content content of the article
+	Content string        `json:"content"`
+	Editor  *AuthorSchema `json:"editor,omitempty"`
+
+	// Id id of the article
+	Id string `json:"id"`
+
+	// RevisionHistories historical article revision
+	RevisionHistories []RevisionHistorySchema `json:"revisionHistories"`
+
+	// Title title of the article
+	Title string `json:"title"`
+}
+
+// ArticleListGetResponse defines model for ArticleListGetResponse.
+type ArticleListGetResponse struct {
+	Data       []ArticleListGetResponseItem `json:"data"`
+	Pagination PaginationSchema             `json:"pagination"`
+}
+
+// ArticleListGetResponseItem defines model for ArticleListGetResponseItem.
+type ArticleListGetResponseItem struct {
+	Author AuthorSchema `json:"author"`
+
+	// Content content of the article. can contains escaped html
+	Content string `json:"content"`
+
+	// Id id of the article
+	Id string `json:"id"`
+
+	// Status article publishing status
+	Status string `json:"status"`
+
+	// Title title of the article
+	Title string `json:"title"`
+}
+
+// ArticleRevisionDetailGetResponse defines model for ArticleRevisionDetailGetResponse.
+type ArticleRevisionDetailGetResponse struct {
+	Author AuthorSchema `json:"author"`
+
+	// Content content of the article
+	Content string        `json:"content"`
+	Editor  *AuthorSchema `json:"editor,omitempty"`
+
+	// Id id of the article
+	Id string `json:"id"`
+
+	// Title title of the article
+	Title string `json:"title"`
+}
+
+// ArticleUpdatePutRequest defines model for ArticleUpdatePutRequest.
+type ArticleUpdatePutRequest struct {
+	// Content content of the article
+	Content *string `json:"content,omitempty"`
+
+	// Status status of the article
+	Status *string `json:"status,omitempty"`
+
+	// Title title of the article
+	Title *string `json:"title,omitempty"`
+}
+
 // AuthLoginRequest defines model for AuthLoginRequest.
 type AuthLoginRequest struct {
 	// Password user password for authentication purpose
@@ -31,14 +111,59 @@ type AuthUserInfoGetResponse struct {
 	Username string `json:"username"`
 }
 
+// AuthorSchema defines model for AuthorSchema.
+type AuthorSchema struct {
+	// Id id of the user
+	Id string `json:"id"`
+
+	// Name name of the user
+	Name string `json:"name"`
+}
+
 // DefaultErrorResponse defines model for DefaultErrorResponse.
 type DefaultErrorResponse struct {
 	// Error error description
 	Error string `json:"error"`
 }
 
+// IDOnlyResponseSchema defines model for IDOnlyResponseSchema.
+type IDOnlyResponseSchema struct {
+	// Id ID of created object
+	Id string `json:"id"`
+}
+
+// PaginationSchema defines model for PaginationSchema.
+type PaginationSchema struct {
+	// Page current active page number (default to 1)
+	Page int64 `json:"page"`
+
+	// PageSize total data displayed on the page (default to 10)
+	PageSize int64 `json:"pageSize"`
+
+	// TotalData total number of data available. with formula of ceil(totalData / pageSize), can determine total page available
+	TotalData int64 `json:"totalData"`
+}
+
+// RevisionHistorySchema defines model for RevisionHistorySchema.
+type RevisionHistorySchema struct {
+	// AuthorId user id of the editor
+	AuthorId string `json:"authorId"`
+
+	// AuthorName full name of the editor
+	AuthorName string `json:"authorName"`
+
+	// Id id of the revision
+	Id string `json:"id"`
+
+	// RevisionTime time which article is inactive (unix millisecond)
+	RevisionTime int64 `json:"revisionTime"`
+}
+
 // UserPostRequest defines model for UserPostRequest.
 type UserPostRequest struct {
+	// FullName user full name
+	FullName string `json:"fullName" validate:"required"`
+
 	// Password user password for authentication purpose
 	Password string `json:"password" validate:"required"`
 
@@ -51,6 +176,39 @@ type UserPostResponse struct {
 	// Id user id
 	Id string `json:"id"`
 }
+
+// OptionalPageParams defines model for OptionalPageParams.
+type OptionalPageParams = int
+
+// OptionalPageSizeParams defines model for OptionalPageSizeParams.
+type OptionalPageSizeParams = int
+
+// OptionalStatusParams defines model for OptionalStatusParams.
+type OptionalStatusParams = string
+
+// RequiredArticleIdParams defines model for RequiredArticleIdParams.
+type RequiredArticleIdParams = string
+
+// RequiredRevisionIdParams defines model for RequiredRevisionIdParams.
+type RequiredRevisionIdParams = string
+
+// ArticleListGetParams defines parameters for ArticleListGet.
+type ArticleListGetParams struct {
+	// Page active page in pagination. default to 1
+	Page *OptionalPageParams `form:"page,omitempty" json:"page,omitempty"`
+
+	// PageSize max number of data in the active page. default to 10
+	PageSize *OptionalPageSizeParams `form:"page-size,omitempty" json:"page-size,omitempty"`
+
+	// Status filter by article status. default to published for non authenticated user and all to authenticated one
+	Status *OptionalStatusParams `form:"status,omitempty" json:"status,omitempty"`
+}
+
+// ArticleCreatePostJSONRequestBody defines body for ArticleCreatePost for application/json ContentType.
+type ArticleCreatePostJSONRequestBody = ArticleCreatePostRequest
+
+// ArticleUpdatePutJSONRequestBody defines body for ArticleUpdatePut for application/json ContentType.
+type ArticleUpdatePutJSONRequestBody = ArticleUpdatePutRequest
 
 // AuthLoginPostJSONRequestBody defines body for AuthLoginPost for application/json ContentType.
 type AuthLoginPostJSONRequestBody = AuthLoginRequest

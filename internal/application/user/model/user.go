@@ -4,6 +4,7 @@ type User struct {
 	Id        string  `db:"id"`
 	Username  string  `db:"username"`
 	Password  string  `db:"password"`
+	FullName  string  `db:"full_name"`
 	CreatedAt int64   `db:"created_at"`
 	CreatedBy string  `db:"created_by"`
 	UpdatedAt *int64  `db:"updated_at"`
@@ -36,11 +37,12 @@ type RoleAcl struct {
 	Access string `db:"access"`
 }
 
-func NewUser(id, username, password string, createdAt int64, createdBy string) *User {
+func NewUser(id, username, password, fullName string, createdAt int64, createdBy string) *User {
 	return &User{
 		Id:        id,
 		Username:  username,
 		Password:  password,
+		FullName:  fullName,
 		CreatedAt: createdAt,
 		CreatedBy: createdBy,
 	}

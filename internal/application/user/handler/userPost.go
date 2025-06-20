@@ -24,6 +24,7 @@ func (h *Handler) UserPost(ctx echo.Context) error {
 	output, err := h.Service.RegisterUser(reqCtx, types.RegisterUserInput{
 		Username: reqBody.Username,
 		Password: reqBody.Password,
+		FullName: reqBody.FullName,
 	})
 	if err != nil {
 		return util.ReturnError(ctx, err, h.Logger)

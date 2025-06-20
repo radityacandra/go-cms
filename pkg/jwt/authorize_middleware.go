@@ -20,3 +20,17 @@ func Authorize() echo.MiddlewareFunc {
 		}
 	}
 }
+
+func OptionalAuthorize() echo.MiddlewareFunc {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			data, _ := AuthorizeToken(c.Request().Header.Get("Authorization"))
+
+			if data != nil {
+				c.Set(types.CONTEXT_KEY, data)
+			}
+
+			return next(c)
+		}
+	}
+}
