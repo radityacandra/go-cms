@@ -159,6 +159,27 @@ type RevisionHistorySchema struct {
 	RevisionTime int64 `json:"revisionTime"`
 }
 
+// TagCreatePostRequest defines model for TagCreatePostRequest.
+type TagCreatePostRequest struct {
+	// Name name of the tag
+	Name string `json:"name" validate:"required"`
+}
+
+// TagListGetResponse defines model for TagListGetResponse.
+type TagListGetResponse struct {
+	Data       []TagListGetResponseItem `json:"data"`
+	Pagination PaginationSchema         `json:"pagination"`
+}
+
+// TagListGetResponseItem defines model for TagListGetResponseItem.
+type TagListGetResponseItem struct {
+	// Id id of the tag
+	Id string `json:"id"`
+
+	// Name name of the tag
+	Name string `json:"name"`
+}
+
 // UserPostRequest defines model for UserPostRequest.
 type UserPostRequest struct {
 	// FullName user full name
@@ -204,6 +225,15 @@ type ArticleListGetParams struct {
 	Status *OptionalStatusParams `form:"status,omitempty" json:"status,omitempty"`
 }
 
+// TagListGetParams defines parameters for TagListGet.
+type TagListGetParams struct {
+	// Page active page in pagination. default to 1
+	Page *OptionalPageParams `form:"page,omitempty" json:"page,omitempty"`
+
+	// PageSize max number of data in the active page. default to 10
+	PageSize *OptionalPageSizeParams `form:"page-size,omitempty" json:"page-size,omitempty"`
+}
+
 // ArticleCreatePostJSONRequestBody defines body for ArticleCreatePost for application/json ContentType.
 type ArticleCreatePostJSONRequestBody = ArticleCreatePostRequest
 
@@ -212,6 +242,9 @@ type ArticleUpdatePutJSONRequestBody = ArticleUpdatePutRequest
 
 // AuthLoginPostJSONRequestBody defines body for AuthLoginPost for application/json ContentType.
 type AuthLoginPostJSONRequestBody = AuthLoginRequest
+
+// TagCreatePostJSONRequestBody defines body for TagCreatePost for application/json ContentType.
+type TagCreatePostJSONRequestBody = TagCreatePostRequest
 
 // UserPostJSONRequestBody defines body for UserPost for application/json ContentType.
 type UserPostJSONRequestBody = UserPostRequest

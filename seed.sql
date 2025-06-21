@@ -20,6 +20,12 @@ VALUES (gen_random_uuid(), 'c9bb254c-6e59-4aec-a5ff-4ac093b80ddb', 'update-artic
 INSERT INTO public.role_acls(id, role_id, access, is_deleted, created_by, created_at)
 VALUES (gen_random_uuid(), 'c9bb254c-6e59-4aec-a5ff-4ac093b80ddb', 'get-article-revision', false, 'system', EXTRACT(EPOCH FROM NOW() AT TIME ZONE 'UTC') * 1000);
 
+INSERT INTO public.role_acls(id, role_id, access, is_deleted, created_by, created_at)
+VALUES (gen_random_uuid(), 'c9bb254c-6e59-4aec-a5ff-4ac093b80ddb', 'create-tag', false, 'system', EXTRACT(EPOCH FROM NOW() AT TIME ZONE 'UTC') * 1000);
+
+INSERT INTO public.role_acls(id, role_id, access, is_deleted, created_by, created_at)
+VALUES (gen_random_uuid(), 'c9bb254c-6e59-4aec-a5ff-4ac093b80ddb', 'list-tag', false, 'system', EXTRACT(EPOCH FROM NOW() AT TIME ZONE 'UTC') * 1000);
+
 -- default user
 INSERT INTO "public"."users"("id","username","password","is_deleted","created_by","created_at","updated_at","updated_by")
 VALUES

@@ -10,9 +10,11 @@ import (
 	"github.com/radityacandra/go-cms/api/articlePrivate"
 	"github.com/radityacandra/go-cms/api/auth"
 	"github.com/radityacandra/go-cms/api/authPrivate"
+	"github.com/radityacandra/go-cms/api/tag"
 	"github.com/radityacandra/go-cms/api/user"
 	articleHandler "github.com/radityacandra/go-cms/internal/application/article/handler"
 	authHandler "github.com/radityacandra/go-cms/internal/application/auth/handler"
+	tagHandler "github.com/radityacandra/go-cms/internal/application/tag/handler"
 	"github.com/radityacandra/go-cms/internal/application/user/handler"
 	"github.com/radityacandra/go-cms/internal/core"
 	"github.com/radityacandra/go-cms/pkg/jwt"
@@ -45,6 +47,9 @@ func InitServer(ctx context.Context, deps *core.Dependency) {
 	authHandler := authHandler.NewHandler(deps)
 	auth.RegisterHandlers(e, authHandler)
 	authPrivate.RegisterHandlers(ePrivate, authHandler)
+
+	tagHandler := tagHandler.NewHandler(deps)
+	tag.RegisterHandlers(ePrivate, tagHandler)
 
 	deps.Logger.Info("Web server ready", zap.Int("port", 9000))
 	go func() {

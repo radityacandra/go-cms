@@ -8,6 +8,8 @@ tags:
     description: Endpoints for authentication
   - name: users
     description: Endpoints on user domain
+  - name: tags
+    description: Endpoints on tag domain
 paths:
   /api/v1/users:
     post:
@@ -205,6 +207,57 @@ paths:
                 $ref: '#/components/schemas/ArticleRevisionDetailGetResponse'
         '404':
           description: Not Found - Article or revision does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultErrorResponse'
+  /api/v1/tags:
+    post:
+      tags:
+        - tags
+      summary: Create a new tag
+      description: Create a new tag with a name
+      operationId: TagCreatePost
+      security:
+        - BearerAuth: ['create-tag']
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TagCreatePostRequest'
+      responses:
+        '200':
+          description: Success - Returns created tag id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IDOnlyResponseSchema'
+        '400':
+          description: Error - Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultErrorResponse'
+    get:
+      tags:
+        - tags
+      summary: Get tag list
+      description: Returns a paginated list of tags
+      operationId: TagListGet
+      security:
+        - BearerAuth: ['list-tag']
+      parameters:
+        - $ref: '#/components/parameters/OptionalPageParams'
+        - $ref: '#/components/parameters/OptionalPageSizeParams'
+      responses:
+        '200':
+          description: Success - Returns tag list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagListGetResponse'
+        '400':
+          description: Error - Validation error
           content:
             application/json:
               schema:
@@ -545,3 +598,40 @@ components:
           $ref: '#/components/schemas/AuthorSchema'
         editor:
           $ref: '#/components/schemas/AuthorSchema'
+    TagCreatePostRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: name of the tag
+          example: Technology
+          x-oapi-codegen-extra-tags:
+            validate: required
+    TagListGetResponse:
+      type: object
+      required:
+        - data
+        - pagination
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagListGetResponseItem'
+        pagination:
+          $ref: '#/components/schemas/PaginationSchema'
+    TagListGetResponseItem:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          description: id of the tag
+          example: 123e4567-e89b-12d3-a456-426614174000
+        name:
+          type: string
+          description: name of the tag
+          example: Technology
