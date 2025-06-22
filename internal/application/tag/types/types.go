@@ -18,3 +18,5 @@ type CreateTagInput struct {
 	api.TagCreatePostRequest
 	UserId string
 }
+
+type ListActiveTagOutput []api.TagListGetResponseItem

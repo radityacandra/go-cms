@@ -5,6 +5,7 @@ import (
 	"errors"
 	"syscall"
 
+	"github.com/go-co-op/gocron/v2"
 	"github.com/labstack/echo/v4"
 	"github.com/radityacandra/go-cms/pkg/database"
 	"go.uber.org/zap"
@@ -15,6 +16,7 @@ type Dependency struct {
 	DB     *database.DB
 	Config *Config
 	Echo   *echo.Echo
+	Gocron gocron.Scheduler
 }
 
 func NewDependency(logger *zap.Logger, db *database.DB, config *Config) *Dependency {
@@ -44,6 +46,14 @@ func (d *Dependency) GracefulShutdown(ctx context.Context) int {
 		code = 1
 	} else {
 		d.Logger.Info("success to close database connection")
+	}
+
+	err = d.Gocron.Shutdown()
+	if err != nil {
+		d.Logger.Error("failed to shutdown cron scheduler", zap.Error(err))
+		code = 1
+	} else {
+		d.Logger.Info("success to close cron scheduler")
 	}
 
 	err = d.Logger.Sync()

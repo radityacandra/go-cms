@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 
+	"github.com/radityacandra/go-cms/internal/application/article/model"
 	"github.com/radityacandra/go-cms/internal/application/article/repository"
 	"github.com/radityacandra/go-cms/internal/application/article/types"
 )
@@ -13,6 +14,7 @@ type IService interface {
 	DetailArticle(ctx context.Context, articleId, userId string) (types.DetailArticleOutput, error)
 	CreateArticleRevision(ctx context.Context, input types.CreateArticleRevisionInput) (string, error)
 	DetailArticleRevision(ctx context.Context, articleId, revisionId string) (types.DetailArticleRevisionOutput, error)
+	CalculateTagAssociations(ctx context.Context, article model.Article) error
 }
 
 type Service struct {

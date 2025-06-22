@@ -42,3 +42,12 @@ type CreateArticleRevisionInput struct {
 }
 
 type DetailArticleRevisionOutput api.ArticleRevisionDetailGetResponse
+
+type UpsertTagAssociationInput struct {
+	Id        string  `db:"id"`
+	Tag1Id    string  `db:"tag1_id"`
+	Tag2Id    string  `db:"tag2_id"`
+	Score     float64 `db:"score"`
+	CreatedBy string  `db:"created_by"`
+	CreatedAt int64   `db:"created_at"`
+}

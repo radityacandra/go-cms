@@ -476,6 +476,11 @@ components:
           format: int64
           description: total number of data available. with formula of ceil(totalData / pageSize), can determine total page available
           example: 156
+    ArticleTagsSchema:
+      type: array
+      items:
+        type: string
+        example: Art
     ArticleCreatePostRequest:
       type: object
       required:
@@ -495,6 +500,8 @@ components:
           type: string
           description: publishing status of the article
           example: drafted
+        tags:
+          $ref: '#/components/schemas/ArticleTagsSchema'
     IDOnlyResponseSchema:
       type: object
       required:
@@ -549,6 +556,8 @@ components:
           type: string
           description: status of the article
           example: submitted
+        tags:
+          $ref: '#/components/schemas/ArticleTagsSchema'
     RevisionHistorySchema:
       type: object
       required:

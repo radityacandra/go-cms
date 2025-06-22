@@ -10,6 +10,8 @@ import (
 type IService interface {
 	ListTag(ctx context.Context, input types.ListTagInput) (types.ListTagOutput, error)
 	CreateTag(ctx context.Context, input types.CreateTagInput) (string, error)
+	CalculateTrendingScore(ctx context.Context, tagId string) error
+	ListActiveTag(ctx context.Context) (types.ListActiveTagOutput, error)
 }
 
 type Service struct {

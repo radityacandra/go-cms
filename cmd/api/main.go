@@ -8,6 +8,7 @@ import (
 	"syscall"
 
 	"github.com/radityacandra/go-cms/internal/core"
+	"github.com/radityacandra/go-cms/internal/scheduler"
 	"github.com/radityacandra/go-cms/internal/server"
 	"github.com/radityacandra/go-cms/pkg/database"
 	"github.com/radityacandra/go-cms/pkg/logger"
@@ -41,6 +42,8 @@ func main() {
 	deps := core.NewDependency(logger, db, config)
 
 	server.InitServer(ctx, deps)
+
+	scheduler.InitScheduler(ctx, deps)
 
 	// process blocked here
 	code := deps.GracefulShutdown(ctx)

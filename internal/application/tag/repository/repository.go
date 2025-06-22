@@ -11,6 +11,9 @@ import (
 type IRepository interface {
 	ListTag(ctx context.Context, input types.ListTagInput) (types.ListTagOutput, error)
 	CreateTag(ctx context.Context, input model.Tag) error
+	FindTagById(ctx context.Context, tagId string) (*model.Tag, error)
+	UpdateTag(ctx context.Context, input model.Tag) error
+	ListAll(ctx context.Context) (types.ListActiveTagOutput, error)
 }
 
 type Repository struct {

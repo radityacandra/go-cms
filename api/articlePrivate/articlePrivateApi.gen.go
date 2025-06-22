@@ -22,7 +22,8 @@ type ArticleCreatePostRequest struct {
 	Content string `json:"content"`
 
 	// Status publishing status of the article
-	Status string `json:"status"`
+	Status string             `json:"status"`
+	Tags   *ArticleTagsSchema `json:"tags,omitempty"`
 
 	// Title title of the article
 	Title string `json:"title"`
@@ -43,13 +44,17 @@ type ArticleRevisionDetailGetResponse struct {
 	Title string `json:"title"`
 }
 
+// ArticleTagsSchema defines model for ArticleTagsSchema.
+type ArticleTagsSchema = []string
+
 // ArticleUpdatePutRequest defines model for ArticleUpdatePutRequest.
 type ArticleUpdatePutRequest struct {
 	// Content content of the article
 	Content *string `json:"content,omitempty"`
 
 	// Status status of the article
-	Status *string `json:"status,omitempty"`
+	Status *string            `json:"status,omitempty"`
+	Tags   *ArticleTagsSchema `json:"tags,omitempty"`
 
 	// Title title of the article
 	Title *string `json:"title,omitempty"`

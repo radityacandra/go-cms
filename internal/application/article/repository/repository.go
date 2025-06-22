@@ -14,6 +14,8 @@ type IRepository interface {
 	FindArticleByIdAndOptionalStatus(ctx context.Context, articleId, status string) (*model.Article, error)
 	UpdateArticle(ctx context.Context, input model.Article) error
 	FindArticleRevisionByIdAndArticleId(ctx context.Context, articleId, id string) (*model.Article, error)
+	CountArticleContainingTags(ctx context.Context, tagIds []string) (int64, error)
+	UpsertTagAssociation(ctx context.Context, input types.UpsertTagAssociationInput) error
 	database.ITransaction
 }
 

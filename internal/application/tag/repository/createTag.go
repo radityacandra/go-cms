@@ -8,8 +8,8 @@ import (
 
 func (r *Repository) CreateTag(ctx context.Context, input model.Tag) error {
 	_, err := r.Db.NamedExecContext(ctx, `
-		INSERT INTO public.tags(id, name, popularity_score, created_by, created_at)
-		VALUES(:id, :name, :popularity_score, :created_by, :created_at)`, &input)
+		INSERT INTO public.tags(id, name, trending_score, created_by, created_at)
+		VALUES(:id, :name, :trending_score, :created_by, :created_at)`, &input)
 
 	return err
 }
