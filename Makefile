@@ -8,3 +8,6 @@ run:
 
 generate_mock:
 	mockery
+
+run_test_unit:
+	go test -short ./...

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/google/uuid"
 	"github.com/radityacandra/go-cms/internal/application/auth/service"
 	"github.com/radityacandra/go-cms/internal/application/auth/types"
 	"github.com/radityacandra/go-cms/internal/application/user/model"
@@ -48,7 +49,14 @@ szLQ5UyjT6hr1KxVnGRfeQ==
 -----END PRIVATE KEY-----
 `
 
-	token, exp, _ := jwt.BuildToken(map[string]interface{}{}, privateKey)
+	var userId = uuid.NewString()
+
+	token, exp, _ := jwt.BuildToken(map[string]interface{}{
+		"sub": userId,
+		"scopes": []string{
+			"get-profile",
+		},
+	}, privateKey)
 
 	type fields struct {
 		Repository repository.IRepository
@@ -177,6 +185,16 @@ szLQ5UyjT6hr1KxVnGRfeQ==
 				}).Return(&model.User{
 					Username: tt.args.input.Username,
 					Password: hashedPassw,
+					Id:       userId,
+					UserRoles: []model.UserRole{
+						{
+							RoleAcls: []model.RoleAcl{
+								{
+									Access: "get-profile",
+								},
+							},
+						},
+					},
 				}, nil).Times(1)
 
 				return tt

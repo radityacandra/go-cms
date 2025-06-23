@@ -43,3 +43,4 @@ $ make run
 - `make generate`: generate openapi code generator for echo server and request/response datatypes
 - `make run`: run application for local development
 - `make generate_mock`: generate mock with mockery
+- `make run_test_unit`: run complete unit test
