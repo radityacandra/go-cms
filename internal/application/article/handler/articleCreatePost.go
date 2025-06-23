@@ -16,6 +16,10 @@ func (h *Handler) ArticleCreatePost(ctx echo.Context) error {
 		return util.ReturnBadRequest(ctx, err, h.Logger)
 	}
 
+	if err := ctx.Validate(reqBody); err != nil {
+		return util.ReturnBadRequest(ctx, err, h.Logger)
+	}
+
 	if reqBody.Status == "published" {
 		if ok := jwt.ScopeCheck(ctx, []string{"create-article-published"}); !ok {
 			return nil

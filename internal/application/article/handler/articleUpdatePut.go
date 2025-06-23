@@ -16,6 +16,10 @@ func (h *Handler) ArticleUpdatePut(ctx echo.Context, articleId api.RequiredArtic
 		return util.ReturnBadRequest(ctx, err, h.Logger)
 	}
 
+	if err := ctx.Validate(reqBody); err != nil {
+		return util.ReturnBadRequest(ctx, err, h.Logger)
+	}
+
 	if reqBody.Status != nil && *reqBody.Status == "published" {
 		if ok := jwt.ScopeCheck(ctx, []string{"update-article-published"}); !ok {
 			return nil

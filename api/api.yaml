@@ -280,6 +280,8 @@ components:
       example: 1
       schema:
         type: integer
+      x-oapi-codegen-extra-tags:
+        validate: omitempty,min=1
     OptionalPageSizeParams:
       name: page-size
       in: query
@@ -288,6 +290,8 @@ components:
       example: 10
       schema:
         type: integer
+      x-oapi-codegen-extra-tags:
+        validate: omitempty,min=1
     OptionalStatusParams:
       name: status
       in: query
@@ -296,6 +300,8 @@ components:
       example: published
       schema:
         type: string
+      x-oapi-codegen-extra-tags:
+        validate: omitempty,oneof=drafted submitted published
     RequiredArticleIdParams:
       name: article_id
       in: path
@@ -481,6 +487,8 @@ components:
       items:
         type: string
         example: Art
+      x-oapi-codegen-extra-tags:
+        validate: omitempty,min=1,unique
     ArticleCreatePostRequest:
       type: object
       required:
@@ -492,14 +500,20 @@ components:
           type: string
           description: title of the article
           example: Some Article Title
+          x-oapi-codegen-extra-tags:
+            validate: required
         content:
           type: string
           description: content of the article. any contents with html tags are welcomed
           example: <p>some content</p>
+          x-oapi-codegen-extra-tags:
+            validate: required
         status:
           type: string
           description: publishing status of the article
           example: drafted
+          x-oapi-codegen-extra-tags:
+            validate: required,oneof=drafted submitted published
         tags:
           $ref: '#/components/schemas/ArticleTagsSchema'
     IDOnlyResponseSchema:
@@ -519,6 +533,7 @@ components:
         - content
         - author
         - revisionHistories
+        - tags
       properties:
         id:
           type: string
@@ -541,6 +556,8 @@ components:
           description: historical article revision
           items:
             $ref: '#/components/schemas/RevisionHistorySchema'
+        tags:
+          $ref: '#/components/schemas/ArticleTagsSchema'
     ArticleUpdatePutRequest:
       type: object
       properties:
@@ -556,6 +573,8 @@ components:
           type: string
           description: status of the article
           example: submitted
+          x-oapi-codegen-extra-tags:
+            validate: omitempty,oneof=drafted submitted published
         tags:
           $ref: '#/components/schemas/ArticleTagsSchema'
     RevisionHistorySchema:

@@ -5,6 +5,7 @@ package service
 import (
 	context "context"
 
+	model "github.com/radityacandra/go-cms/internal/application/article/model"
 	mock "github.com/stretchr/testify/mock"
 
 	types "github.com/radityacandra/go-cms/internal/application/article/types"
@@ -21,6 +22,53 @@ type MockIService_Expecter struct {
 
 func (_m *MockIService) EXPECT() *MockIService_Expecter {
 	return &MockIService_Expecter{mock: &_m.Mock}
+}
+
+// CalculateTagAssociations provides a mock function with given fields: ctx, article
+func (_m *MockIService) CalculateTagAssociations(ctx context.Context, article model.Article) error {
+	ret := _m.Called(ctx, article)
+
+	if len(ret) == 0 {
+		panic("no return value specified for CalculateTagAssociations")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, model.Article) error); ok {
+		r0 = rf(ctx, article)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// MockIService_CalculateTagAssociations_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CalculateTagAssociations'
+type MockIService_CalculateTagAssociations_Call struct {
+	*mock.Call
+}
+
+// CalculateTagAssociations is a helper method to define mock.On call
+//   - ctx context.Context
+//   - article model.Article
+func (_e *MockIService_Expecter) CalculateTagAssociations(ctx interface{}, article interface{}) *MockIService_CalculateTagAssociations_Call {
+	return &MockIService_CalculateTagAssociations_Call{Call: _e.mock.On("CalculateTagAssociations", ctx, article)}
+}
+
+func (_c *MockIService_CalculateTagAssociations_Call) Run(run func(ctx context.Context, article model.Article)) *MockIService_CalculateTagAssociations_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(model.Article))
+	})
+	return _c
+}
+
+func (_c *MockIService_CalculateTagAssociations_Call) Return(_a0 error) *MockIService_CalculateTagAssociations_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *MockIService_CalculateTagAssociations_Call) RunAndReturn(run func(context.Context, model.Article) error) *MockIService_CalculateTagAssociations_Call {
+	_c.Call.Return(run)
+	return _c
 }
 
 // CreateArticle provides a mock function with given fields: ctx, input

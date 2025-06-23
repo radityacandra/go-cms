@@ -10,6 +10,10 @@ import (
 )
 
 func (h *Handler) TagListGet(ctx echo.Context, params tag.TagListGetParams) error {
+	if err := ctx.Validate(params); err != nil {
+		return util.ReturnBadRequest(ctx, err, h.Logger)
+	}
+
 	if params.Page == nil {
 		defaultPage := 1
 		params.Page = &defaultPage

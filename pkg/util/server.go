@@ -7,14 +7,16 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/radityacandra/go-cms/api"
+	articleType "github.com/radityacandra/go-cms/internal/application/article/types"
 	"github.com/radityacandra/go-cms/internal/application/auth/types"
 	jwtType "github.com/radityacandra/go-cms/pkg/jwt/types"
 	"go.uber.org/zap"
 )
 
 var errorMap = map[error]int{
-	types.ErrUserNotFound:      http.StatusUnauthorized,
-	types.ErrPasswordMissmatch: http.StatusUnauthorized,
+	types.ErrUserNotFound:          http.StatusUnauthorized,
+	types.ErrPasswordMissmatch:     http.StatusUnauthorized,
+	articleType.ErrArticleNotFound: http.StatusNotFound,
 }
 
 const unknownError string = "unknown error"

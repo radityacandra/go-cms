@@ -5,11 +5,17 @@ import (
 	"fmt"
 
 	"github.com/radityacandra/go-cms/internal/application/article/model"
+	tagModel "github.com/radityacandra/go-cms/internal/application/tag/model"
 )
 
 type queryResult struct {
 	model.Article
 	AuthorName string `db:"author_name"`
+}
+
+type queryResultArticleTag struct {
+	model.ArticleTag
+	TagName string `db:"tag_name"`
 }
 
 func (r *Repository) FindArticleByIdAndOptionalStatus(ctx context.Context, articleId string, status string) (*model.Article, error) {
@@ -113,11 +119,14 @@ func (r *Repository) FindArticleByIdAndOptionalStatus(ctx context.Context, artic
 	}
 
 	rows2, err := r.Db.QueryxContext(ctx, `
-		SELECT id, article_id, tag_id, created_by, created_at
-		FROM public.article_tags
+		SELECT at.id, at.article_id, at.tag_id, at.created_by, at.created_at, t.name tag_name
+		FROM public.article_tags at
+			JOIN public.tags t
+				ON at.tag_id = t.id
 		WHERE
-			article_id = $1
-			AND is_deleted = FALSE
+			at.article_id = $1
+			AND at.is_deleted = FALSE
+			AND t.is_deleted = FALSE
 	`, articleId)
 	if err != nil {
 		return nil, err
@@ -125,12 +134,23 @@ func (r *Repository) FindArticleByIdAndOptionalStatus(ctx context.Context, artic
 	defer rows2.Close()
 
 	for rows2.Next() {
-		var item model.ArticleTag
+		var item queryResultArticleTag
 		if err := rows2.StructScan(&item); err != nil {
 			return nil, err
 		}
 
-		article.Tags = append(article.Tags, item)
+		article.Tags = append(article.Tags, model.ArticleTag{
+			Id:        item.Id,
+			ArticleId: item.ArticleId,
+			TagId:     item.TagId,
+			CreatedBy: item.CreatedBy,
+			CreatedAt: item.CreatedAt,
+
+			Tag: tagModel.Tag{
+				Id:   item.TagId,
+				Name: item.TagName,
+			},
+		})
 	}
 
 	return &article, nil

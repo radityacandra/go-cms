@@ -10,14 +10,14 @@ const (
 // ArticleCreatePostRequest defines model for ArticleCreatePostRequest.
 type ArticleCreatePostRequest struct {
 	// Content content of the article. any contents with html tags are welcomed
-	Content string `json:"content"`
+	Content string `json:"content" validate:"required"`
 
 	// Status publishing status of the article
-	Status string             `json:"status"`
-	Tags   *ArticleTagsSchema `json:"tags,omitempty"`
+	Status string             `json:"status" validate:"required,oneof=drafted submitted published"`
+	Tags   *ArticleTagsSchema `json:"tags,omitempty" validate:"omitempty,min=1,unique"`
 
 	// Title title of the article
-	Title string `json:"title"`
+	Title string `json:"title" validate:"required"`
 }
 
 // ArticleDetailGetResponse defines model for ArticleDetailGetResponse.
@@ -33,6 +33,7 @@ type ArticleDetailGetResponse struct {
 
 	// RevisionHistories historical article revision
 	RevisionHistories []RevisionHistorySchema `json:"revisionHistories"`
+	Tags              ArticleTagsSchema       `json:"tags" validate:"omitempty,min=1,unique"`
 
 	// Title title of the article
 	Title string `json:"title"`
@@ -85,8 +86,8 @@ type ArticleUpdatePutRequest struct {
 	Content *string `json:"content,omitempty"`
 
 	// Status status of the article
-	Status *string            `json:"status,omitempty"`
-	Tags   *ArticleTagsSchema `json:"tags,omitempty"`
+	Status *string            `json:"status,omitempty" validate:"omitempty,oneof=drafted submitted published"`
+	Tags   *ArticleTagsSchema `json:"tags,omitempty" validate:"omitempty,min=1,unique"`
 
 	// Title title of the article
 	Title *string `json:"title,omitempty"`
@@ -221,22 +222,22 @@ type RequiredRevisionIdParams = string
 // ArticleListGetParams defines parameters for ArticleListGet.
 type ArticleListGetParams struct {
 	// Page active page in pagination. default to 1
-	Page *OptionalPageParams `form:"page,omitempty" json:"page,omitempty"`
+	Page *OptionalPageParams `form:"page,omitempty" json:"page,omitempty" validate:"omitempty,min=1"`
 
 	// PageSize max number of data in the active page. default to 10
-	PageSize *OptionalPageSizeParams `form:"page-size,omitempty" json:"page-size,omitempty"`
+	PageSize *OptionalPageSizeParams `form:"page-size,omitempty" json:"page-size,omitempty" validate:"omitempty,min=1"`
 
 	// Status filter by article status. default to published for non authenticated user and all to authenticated one
-	Status *OptionalStatusParams `form:"status,omitempty" json:"status,omitempty"`
+	Status *OptionalStatusParams `form:"status,omitempty" json:"status,omitempty" validate:"omitempty,oneof=drafted submitted published"`
 }
 
 // TagListGetParams defines parameters for TagListGet.
 type TagListGetParams struct {
 	// Page active page in pagination. default to 1
-	Page *OptionalPageParams `form:"page,omitempty" json:"page,omitempty"`
+	Page *OptionalPageParams `form:"page,omitempty" json:"page,omitempty" validate:"omitempty,min=1"`
 
 	// PageSize max number of data in the active page. default to 10
-	PageSize *OptionalPageSizeParams `form:"page-size,omitempty" json:"page-size,omitempty"`
+	PageSize *OptionalPageSizeParams `form:"page-size,omitempty" json:"page-size,omitempty" validate:"omitempty,min=1"`
 }
 
 // ArticleCreatePostJSONRequestBody defines body for ArticleCreatePost for application/json ContentType.

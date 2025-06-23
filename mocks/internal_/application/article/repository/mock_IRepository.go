@@ -131,6 +131,63 @@ func (_c *MockIRepository_CommitOrRollbackTransaction_Call) RunAndReturn(run fun
 	return _c
 }
 
+// CountArticleContainingTags provides a mock function with given fields: ctx, tagIds
+func (_m *MockIRepository) CountArticleContainingTags(ctx context.Context, tagIds []string) (int64, error) {
+	ret := _m.Called(ctx, tagIds)
+
+	if len(ret) == 0 {
+		panic("no return value specified for CountArticleContainingTags")
+	}
+
+	var r0 int64
+	var r1 error
+	if rf, ok := ret.Get(0).(func(context.Context, []string) (int64, error)); ok {
+		return rf(ctx, tagIds)
+	}
+	if rf, ok := ret.Get(0).(func(context.Context, []string) int64); ok {
+		r0 = rf(ctx, tagIds)
+	} else {
+		r0 = ret.Get(0).(int64)
+	}
+
+	if rf, ok := ret.Get(1).(func(context.Context, []string) error); ok {
+		r1 = rf(ctx, tagIds)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// MockIRepository_CountArticleContainingTags_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'CountArticleContainingTags'
+type MockIRepository_CountArticleContainingTags_Call struct {
+	*mock.Call
+}
+
+// CountArticleContainingTags is a helper method to define mock.On call
+//   - ctx context.Context
+//   - tagIds []string
+func (_e *MockIRepository_Expecter) CountArticleContainingTags(ctx interface{}, tagIds interface{}) *MockIRepository_CountArticleContainingTags_Call {
+	return &MockIRepository_CountArticleContainingTags_Call{Call: _e.mock.On("CountArticleContainingTags", ctx, tagIds)}
+}
+
+func (_c *MockIRepository_CountArticleContainingTags_Call) Run(run func(ctx context.Context, tagIds []string)) *MockIRepository_CountArticleContainingTags_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].([]string))
+	})
+	return _c
+}
+
+func (_c *MockIRepository_CountArticleContainingTags_Call) Return(_a0 int64, _a1 error) *MockIRepository_CountArticleContainingTags_Call {
+	_c.Call.Return(_a0, _a1)
+	return _c
+}
+
+func (_c *MockIRepository_CountArticleContainingTags_Call) RunAndReturn(run func(context.Context, []string) (int64, error)) *MockIRepository_CountArticleContainingTags_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // CreateArticle provides a mock function with given fields: ctx, input
 func (_m *MockIRepository) CreateArticle(ctx context.Context, input model.Article) error {
 	ret := _m.Called(ctx, input)
@@ -492,6 +549,53 @@ func (_c *MockIRepository_UpdateArticle_Call) Return(_a0 error) *MockIRepository
 }
 
 func (_c *MockIRepository_UpdateArticle_Call) RunAndReturn(run func(context.Context, model.Article) error) *MockIRepository_UpdateArticle_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpsertTagAssociation provides a mock function with given fields: ctx, input
+func (_m *MockIRepository) UpsertTagAssociation(ctx context.Context, input types.UpsertTagAssociationInput) error {
+	ret := _m.Called(ctx, input)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpsertTagAssociation")
+	}
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(context.Context, types.UpsertTagAssociationInput) error); ok {
+		r0 = rf(ctx, input)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// MockIRepository_UpsertTagAssociation_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpsertTagAssociation'
+type MockIRepository_UpsertTagAssociation_Call struct {
+	*mock.Call
+}
+
+// UpsertTagAssociation is a helper method to define mock.On call
+//   - ctx context.Context
+//   - input types.UpsertTagAssociationInput
+func (_e *MockIRepository_Expecter) UpsertTagAssociation(ctx interface{}, input interface{}) *MockIRepository_UpsertTagAssociation_Call {
+	return &MockIRepository_UpsertTagAssociation_Call{Call: _e.mock.On("UpsertTagAssociation", ctx, input)}
+}
+
+func (_c *MockIRepository_UpsertTagAssociation_Call) Run(run func(ctx context.Context, input types.UpsertTagAssociationInput)) *MockIRepository_UpsertTagAssociation_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		run(args[0].(context.Context), args[1].(types.UpsertTagAssociationInput))
+	})
+	return _c
+}
+
+func (_c *MockIRepository_UpsertTagAssociation_Call) Return(_a0 error) *MockIRepository_UpsertTagAssociation_Call {
+	_c.Call.Return(_a0)
+	return _c
+}
+
+func (_c *MockIRepository_UpsertTagAssociation_Call) RunAndReturn(run func(context.Context, types.UpsertTagAssociationInput) error) *MockIRepository_UpsertTagAssociation_Call {
 	_c.Call.Return(run)
 	return _c
 }

@@ -19,14 +19,14 @@ const (
 // ArticleCreatePostRequest defines model for ArticleCreatePostRequest.
 type ArticleCreatePostRequest struct {
 	// Content content of the article. any contents with html tags are welcomed
-	Content string `json:"content"`
+	Content string `json:"content" validate:"required"`
 
 	// Status publishing status of the article
-	Status string             `json:"status"`
-	Tags   *ArticleTagsSchema `json:"tags,omitempty"`
+	Status string             `json:"status" validate:"required,oneof=drafted submitted published"`
+	Tags   *ArticleTagsSchema `json:"tags,omitempty" validate:"omitempty,min=1,unique"`
 
 	// Title title of the article
-	Title string `json:"title"`
+	Title string `json:"title" validate:"required"`
 }
 
 // ArticleRevisionDetailGetResponse defines model for ArticleRevisionDetailGetResponse.
@@ -53,8 +53,8 @@ type ArticleUpdatePutRequest struct {
 	Content *string `json:"content,omitempty"`
 
 	// Status status of the article
-	Status *string            `json:"status,omitempty"`
-	Tags   *ArticleTagsSchema `json:"tags,omitempty"`
+	Status *string            `json:"status,omitempty" validate:"omitempty,oneof=drafted submitted published"`
+	Tags   *ArticleTagsSchema `json:"tags,omitempty" validate:"omitempty,min=1,unique"`
 
 	// Title title of the article
 	Title *string `json:"title,omitempty"`

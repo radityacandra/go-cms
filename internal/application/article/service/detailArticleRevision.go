@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"errors"
 
 	"github.com/radityacandra/go-cms/api"
 	"github.com/radityacandra/go-cms/internal/application/article/types"
@@ -10,7 +11,7 @@ import (
 func (s *Service) DetailArticleRevision(ctx context.Context, articleId, revisionId string) (types.DetailArticleRevisionOutput, error) {
 	article, err := s.Repository.FindArticleRevisionByIdAndArticleId(ctx, articleId, revisionId)
 	if err != nil {
-		return types.DetailArticleRevisionOutput{}, err
+		return types.DetailArticleRevisionOutput{}, errors.Join(err, types.ErrArticleNotFound)
 	}
 
 	return types.DetailArticleRevisionOutput{

@@ -24,6 +24,7 @@ type ArticleDetailGetResponse struct {
 
 	// RevisionHistories historical article revision
 	RevisionHistories []RevisionHistorySchema `json:"revisionHistories"`
+	Tags              ArticleTagsSchema       `json:"tags" validate:"omitempty,min=1,unique"`
 
 	// Title title of the article
 	Title string `json:"title"`
@@ -51,6 +52,9 @@ type ArticleListGetResponseItem struct {
 	// Title title of the article
 	Title string `json:"title"`
 }
+
+// ArticleTagsSchema defines model for ArticleTagsSchema.
+type ArticleTagsSchema = []string
 
 // AuthorSchema defines model for AuthorSchema.
 type AuthorSchema struct {
@@ -109,13 +113,13 @@ type RequiredArticleIdParams = string
 // ArticleListGetParams defines parameters for ArticleListGet.
 type ArticleListGetParams struct {
 	// Page active page in pagination. default to 1
-	Page *OptionalPageParams `form:"page,omitempty" json:"page,omitempty"`
+	Page *OptionalPageParams `form:"page,omitempty" json:"page,omitempty" validate:"omitempty,min=1"`
 
 	// PageSize max number of data in the active page. default to 10
-	PageSize *OptionalPageSizeParams `form:"page-size,omitempty" json:"page-size,omitempty"`
+	PageSize *OptionalPageSizeParams `form:"page-size,omitempty" json:"page-size,omitempty" validate:"omitempty,min=1"`
 
 	// Status filter by article status. default to published for non authenticated user and all to authenticated one
-	Status *OptionalStatusParams `form:"status,omitempty" json:"status,omitempty"`
+	Status *OptionalStatusParams `form:"status,omitempty" json:"status,omitempty" validate:"omitempty,oneof=drafted submitted published"`
 }
 
 // ServerInterface represents all server handlers.

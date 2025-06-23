@@ -12,6 +12,10 @@ import (
 )
 
 func (h *Handler) ArticleListGet(ctx echo.Context, params article.ArticleListGetParams) error {
+	if err := ctx.Validate(params); err != nil {
+		return util.ReturnBadRequest(ctx, err, h.Logger)
+	}
+
 	userId := util.GetLoggedUser(ctx)
 	if params.Status != nil && userId == "" && *params.Status != "published" {
 		return util.ReturnBadRequest(ctx, errors.New("unauthenticated user cannot see unpublished data"), h.Logger)

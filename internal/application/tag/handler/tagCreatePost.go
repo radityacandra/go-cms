@@ -15,6 +15,10 @@ func (h *Handler) TagCreatePost(ctx echo.Context) error {
 		return util.ReturnBadRequest(ctx, err, h.Logger)
 	}
 
+	if err := ctx.Validate(reqBody); err != nil {
+		return util.ReturnBadRequest(ctx, err, h.Logger)
+	}
+
 	userId := util.GetLoggedUser(ctx)
 	reqCtx := ctx.Request().Context()
 	tagId, err := h.Service.CreateTag(reqCtx, types.CreateTagInput{

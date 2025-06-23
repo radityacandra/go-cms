@@ -26,6 +26,7 @@ func (s *Service) DetailArticle(ctx context.Context, articleId, userId string) (
 			Name: article.Author.Name,
 		},
 		RevisionHistories: []api.RevisionHistorySchema{},
+		Tags:              api.ArticleTagsSchema{},
 	}
 
 	for _, item := range article.ArticleRevisions {
@@ -35,6 +36,10 @@ func (s *Service) DetailArticle(ctx context.Context, articleId, userId string) (
 			AuthorName:   item.Author.Name,
 			RevisionTime: item.CreatedAt,
 		})
+	}
+
+	for _, articleTag := range article.Tags {
+		output.Tags = append(output.Tags, articleTag.Tag.Name)
 	}
 
 	return output, nil

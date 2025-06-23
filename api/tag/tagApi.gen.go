@@ -70,10 +70,10 @@ type OptionalPageSizeParams = int
 // TagListGetParams defines parameters for TagListGet.
 type TagListGetParams struct {
 	// Page active page in pagination. default to 1
-	Page *OptionalPageParams `form:"page,omitempty" json:"page,omitempty"`
+	Page *OptionalPageParams `form:"page,omitempty" json:"page,omitempty" validate:"omitempty,min=1"`
 
 	// PageSize max number of data in the active page. default to 10
-	PageSize *OptionalPageSizeParams `form:"page-size,omitempty" json:"page-size,omitempty"`
+	PageSize *OptionalPageSizeParams `form:"page-size,omitempty" json:"page-size,omitempty" validate:"omitempty,min=1"`
 }
 
 // TagCreatePostJSONRequestBody defines body for TagCreatePost for application/json ContentType.

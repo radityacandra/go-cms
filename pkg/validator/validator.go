@@ -52,6 +52,20 @@ func NewValidator() *Validator {
 		return t
 	})
 
+	validate.RegisterTranslation("min", translator, func(ut ut.Translator) error {
+		return ut.Add("min", "minimum value for {0} is {1}", true)
+	}, func(ut ut.Translator, fe validator.FieldError) string {
+		t, _ := ut.T("min", fe.Field(), fe.Param())
+		return t
+	})
+
+	validate.RegisterTranslation("oneof", translator, func(ut ut.Translator) error {
+		return ut.Add("oneof", "invalid allowed value for {0}", true)
+	}, func(ut ut.Translator, fe validator.FieldError) string {
+		t, _ := ut.T("oneof", fe.Field())
+		return t
+	})
+
 	return &Validator{
 		Validator:  validate,
 		Translator: translator,
