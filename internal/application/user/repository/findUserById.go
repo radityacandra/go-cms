@@ -12,7 +12,7 @@ import (
 func (r *Repository) FindUserById(ctx context.Context, userId string) (*model.User, error) {
 	row := r.Db.QueryRowxContext(ctx, `
 		SELECT
-			id, username, password, created_at, created_by, updated_at, updated_by
+			id, username, password, full_name, created_at, created_by, updated_at, updated_by
 		FROM public.users
 		WHERE
 			id = $1
