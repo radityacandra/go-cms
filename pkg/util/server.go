@@ -9,6 +9,7 @@ import (
 	"github.com/radityacandra/go-cms/api"
 	articleType "github.com/radityacandra/go-cms/internal/application/article/types"
 	"github.com/radityacandra/go-cms/internal/application/auth/types"
+	userType "github.com/radityacandra/go-cms/internal/application/user/types"
 	jwtType "github.com/radityacandra/go-cms/pkg/jwt/types"
 	"go.uber.org/zap"
 )
@@ -17,6 +18,8 @@ var errorMap = map[error]int{
 	types.ErrUserNotFound:          http.StatusUnauthorized,
 	types.ErrPasswordMissmatch:     http.StatusUnauthorized,
 	articleType.ErrArticleNotFound: http.StatusNotFound,
+	userType.ErrUserConflicting:    http.StatusConflict,
+	userType.ErrUserNotFound:       http.StatusNotFound,
 }
 
 const unknownError string = "unknown error"

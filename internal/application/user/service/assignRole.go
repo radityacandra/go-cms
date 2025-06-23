@@ -21,9 +21,9 @@ func (s *Service) AssignRole(ctx context.Context, userId, roleName string) error
 
 	// if transaction is created inside the function, let it commit inside
 	if !s.Repository.IsTransaction(ctx) {
-		defer func(err error) {
+		defer func() {
 			s.Repository.CommitOrRollbackTransaction(txCtx, err)
-		}(err)
+		}()
 	}
 
 	userRole := model.UserRole{

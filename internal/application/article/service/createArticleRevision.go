@@ -38,9 +38,9 @@ func (s *Service) CreateArticleRevision(ctx context.Context, input types.CreateA
 
 	// if transaction is created inside the function, let it commit inside
 	if !s.Repository.IsTransaction(ctx) {
-		defer func(err error) {
+		defer func() {
 			s.Repository.CommitOrRollbackTransaction(txCtx, err)
-		}(err)
+		}()
 	}
 
 	revisionArticleId, err := s.CreateArticle(txCtx, types.CreateArticleInput{

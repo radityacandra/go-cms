@@ -14,7 +14,7 @@ import (
 func (s *Service) CalculateTagAssociations(ctx context.Context, input model.Article) error {
 	article, err := s.Repository.FindArticleByIdAndOptionalStatus(ctx, input.Id, "")
 	if err != nil {
-		return err
+		return errors.Join(err, types.ErrArticleNotFound)
 	}
 
 	pairList := article.TagCombinationPairs()

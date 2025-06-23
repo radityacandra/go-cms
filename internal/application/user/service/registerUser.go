@@ -42,9 +42,9 @@ func (s *Service) RegisterUser(ctx context.Context, input types.RegisterUserInpu
 
 	// if transaction is created inside the function, let it commit inside
 	if !s.Repository.IsTransaction(ctx) {
-		defer func(err error) {
+		defer func() {
 			s.Repository.CommitOrRollbackTransaction(txCtx, err)
-		}(err)
+		}()
 	}
 
 	err = s.Repository.InsertUser(txCtx, *user)
