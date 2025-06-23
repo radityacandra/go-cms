@@ -8,6 +8,18 @@ to be able to run this application locally, you will need the following:
 - docker with docker compose installed ([Installation Docs](https://docs.docker.com/engine/install/))
 - GNU make ([Docs](https://www.gnu.org/software/make/))
 
+## DB Architecture
+![DB Architecture](ddl.png)
+
+## Default User
+This project is included with default user located at `seed.sql`
+
+```
+username: admin
+password: someuser
+```
+**NOTES: please keep in mind that this is a temporary user meant to be deleted before production deployment. please create another user with proper role and ACL then delete the default user**
+
 ## Local Development
 ```
 $ docker compose up --build
