@@ -16,7 +16,7 @@ This project is included with default user located at `seed.sql`
 
 ```
 username: admin
-password: someuser
+password: somepassword
 ```
 **NOTES: please keep in mind that this is a temporary user meant to be deleted before production deployment. please create another user with proper role and ACL then delete the default user**
 
